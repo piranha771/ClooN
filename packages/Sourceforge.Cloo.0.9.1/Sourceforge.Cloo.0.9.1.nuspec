@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Sourceforge.Cloo</id>
+    <version>0.9.1</version>
+    <title>Cloo</title>
+    <authors>Fatjon Sakiqi</authors>
+    <owners>Fatjon Sakiqi</owners>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>http://sourceforge.net/projects/cloo/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Cloo is an open source, easy to use, managed library which enables .NET/Mono applications to take full advantage of the OpenCL framework.</description>
+    <summary>Take full advantage of the OpenCL framework.</summary>
+    <tags>cloo opencl mono opensource</tags>
+  </metadata>
+</package>

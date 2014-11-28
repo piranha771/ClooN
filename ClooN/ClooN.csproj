@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6245D3D1-C1F6-49BA-974F-FE9B9201C309}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ClooN</RootNamespace>
+    <AssemblyName>ClooN</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Cloo">
+      <HintPath>..\packages\Sourceforge.Cloo.0.9.1\lib\net35\Cloo.dll</HintPath>
+    </Reference>
+    <Reference Include="RndXorshift">
+      <HintPath>..\..\RndXorshift\RndXorshift\bin\Release\RndXorshift.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Functions\AbsImpl.cs" />
+    <Compile Include="Functions\AddImpl.cs" />
+    <Compile Include="Functions\ConstantImpl.cs" />
+    <Compile Include="Functions\DivideImpl.cs" />
+    <Compile Include="Functions\FractalBrownianMotionImpl.cs" />
+    <Compile Include="Functions\LerpImpl.cs" />
+    <Compile Include="Functions\MaxImpl.cs" />
+    <Compile Include="Functions\MinImpl.cs" />
+    <Compile Include="Functions\Module.cs" />
+    <Compile Include="Functions\MultiplyImpl.cs" />
+    <Compile Include="Functions\PowerImpl.cs" />
+    <Compile Include="Functions\RidgedMultifractalImpl.cs" />
+    <Compile Include="Functions\RoundImpl.cs" />
+    <Compile Include="Functions\SubtractImpl.cs" />
+    <Compile Include="Functions\TurbulenceImpl.cs" />
+    <Compile Include="Functions\VoronoiImpl.cs" />
+    <Compile Include="IModule.cs" />
+    <Compile Include="Noise.cs" />
+    <Compile Include="NoiseProgram.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Single3.cs" />
+    <Compile Include="VoronoiType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Resources\noise.cl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
