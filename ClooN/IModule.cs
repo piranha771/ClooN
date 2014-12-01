@@ -5,6 +5,9 @@ using System.Text;
 
 namespace ClooN
 {
+    /// <summary>
+    /// An interface for a noise module
+    /// </summary>
     public interface IModule
     {
 

@@ -12,8 +12,10 @@ namespace ClooN
     /// <summary>
     /// Noise programm to generate noise on gpu
     /// </summary>
-    public class NoiseProgram {
+    public sealed class NoiseProgram : IDisposable
+    {
 
+        private bool disposed = false;
         private object sync = new object();
 
         private const int PermSize = 256;
@@ -136,6 +138,25 @@ namespace ClooN
                 permutation[i] = permList[index];
                 permList.RemoveAt(index);
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposed)
+                return;
+
+            if (disposing)
+            {
+                context.Dispose();
+            }
+
+            disposed = true;
         }
     }
 }
