@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.IO;
 using Cloo;
 using RndXorshift;
 using ClooN.Functions;
@@ -32,7 +30,6 @@ namespace ClooN
         public string CompleteSource
         {
             get { return completeSource; }
-            set { completeSource = value; }
         }
 
         public NoiseProgram(IModule module)
