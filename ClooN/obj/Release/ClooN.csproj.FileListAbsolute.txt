@@ -19,3 +19,4 @@ C:\Users\Piranha\Dropbox\Projekte\ClooN\ClooN\obj\Release\ClooN.Properties.Resou
 C:\Users\Piranha\Dropbox\Projekte\ClooN\ClooN\obj\Release\ClooN.csproj.GenerateResource.Cache
 C:\Users\Piranha\Dropbox\Projekte\ClooN\ClooN\obj\Release\ClooN.dll
 C:\Users\Piranha\Dropbox\Projekte\ClooN\ClooN\obj\Release\ClooN.pdb
+C:\Users\Piranha\Dropbox\Projekte\ClooN\ClooN\bin\Release\ClooN.XML

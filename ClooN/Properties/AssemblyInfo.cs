@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die mit einer Assembly verknüpft sind.
 [assembly: AssemblyTitle("ClooN")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Easily create procedural noise data on your GPU using OpenCL")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("ClooN")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyCopyright("Copyright ©  2014 David Asmuth")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
