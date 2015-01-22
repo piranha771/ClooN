@@ -2,17 +2,19 @@
 
 namespace ClooN.Functions
 {
-    internal class FractalBrownianMotionImpl : Module {
-        
-        private FractalBrownianMotionImpl(int octaves, float frequency, float lacunarity, float persistence) {
+    internal class FractalBrownianMotionImpl : NoiseModule {
+
+        private FractalBrownianMotionImpl(int octaves, NoiseModule frequency, NoiseModule lacunarity, NoiseModule persistence)
+        {
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberGroupSeparator = "";
             nfi.NumberDecimalSeparator = ".";
 
-            genCode(octaves.ToString(nfi), frequency.ToString(Noise.NI, nfi), lacunarity.ToString(Noise.NI, nfi), persistence.ToString(Noise.NI, nfi));
+            genCode(octaves.ToString(nfi), frequency.Code, lacunarity.Code, persistence.Code);
         }
 
-        public static Module ValueOf(int octaves, float frequency, float lacunarity, float persistence) {
+        public static NoiseModule ValueOf(int octaves, NoiseModule frequency, NoiseModule lacunarity, NoiseModule persistence)
+        {
             return new FractalBrownianMotionImpl(octaves, frequency, lacunarity, persistence);
         }
 

@@ -1,17 +1,17 @@
 ﻿
 namespace ClooN.Functions
 {
-    internal class PowerImpl : Module {
-        private PowerImpl(Module basis, Module exponent) {
+    internal class PowerImpl : NoiseModule {
+        private PowerImpl(NoiseModule basis, NoiseModule exponent) {
             genCode(basis.Code, exponent.Code);
         }
 
-        public static Module ValueOf(Module basis, Module exponent) {
+        public static NoiseModule ValueOf(NoiseModule basis, NoiseModule exponent) {
             return new PowerImpl(basis, exponent);
         }
 
         private void genCode(string basisCode, string exponentCode) {
-            code = "pow(abs(" + basisCode + ")," + exponentCode + ")";
+            code = "pow(fabs(" + basisCode + ")," + exponentCode + ")";
         }
     }
 }

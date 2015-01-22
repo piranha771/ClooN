@@ -1,7 +1,7 @@
 ﻿
 namespace ClooN
 {
-    public enum VoronoiType {
+    public enum VoronoiType : int {
         Cell = 0,
         F1 = 1,
         F2 = 2,

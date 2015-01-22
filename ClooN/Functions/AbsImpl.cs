@@ -1,18 +1,18 @@
 ﻿
 namespace ClooN.Functions
 {
-    internal class AbsImpl : Module {
-        private AbsImpl(Module module) {
+    internal class AbsImpl : NoiseModule {
+        private AbsImpl(NoiseModule module) {
             genCode(module.Code);
         }
 
-        public static Module ValueOf(Module module)
+        public static NoiseModule ValueOf(NoiseModule module)
         {
             return new AbsImpl(module);
         }
 
         private void genCode(string moduleCode) {
-            code = "abs("+moduleCode+")";
+            code = "fabs("+moduleCode+")";
         }
     }
 }

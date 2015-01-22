@@ -1,11 +1,11 @@
 ﻿namespace ClooN.Functions
 {
-    internal class DivideImpl : Module {
-        private DivideImpl(Module ls, Module rs) {
+    internal class DivideImpl : NoiseModule {
+        private DivideImpl(NoiseModule ls, NoiseModule rs) {
             genCode(ls.Code, rs.Code);
         }
 
-        public static Module ValueOf(Module ls, Module rs) {
+        public static NoiseModule ValueOf(NoiseModule ls, NoiseModule rs) {
             return new DivideImpl(ls, rs);
         }
 

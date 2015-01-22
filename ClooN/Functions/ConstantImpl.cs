@@ -2,7 +2,7 @@
 
 namespace ClooN.Functions
 {
-    internal class ConstantImpl : Module {
+    internal class ConstantImpl : NoiseModule {
 
         private ConstantImpl(float value) {
             NumberFormatInfo nfi = new NumberFormatInfo();
@@ -12,7 +12,7 @@ namespace ClooN.Functions
             genCode(value.ToString(Noise.NI, nfi));
         }
 
-        public static Module ValueOf(float value) {
+        public static NoiseModule ValueOf(float value) {
             return new ConstantImpl(value);
         }
 

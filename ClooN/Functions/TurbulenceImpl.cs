@@ -2,22 +2,25 @@
 
 namespace ClooN.Functions
 {
-    internal class TurbulenceImpl : Module {
+    internal class TurbulenceImpl : NoiseModule {
 
-        private TurbulenceImpl(int octaves, float frequency, float lacunarity, float gain) {
+        private TurbulenceImpl(int octaves, NoiseModule frequency, NoiseModule lacunarity, NoiseModule persistence)
+        {
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberGroupSeparator = "";
             nfi.NumberDecimalSeparator = ".";
 
-            genCode(octaves.ToString(nfi), frequency.ToString(Noise.NI, nfi), lacunarity.ToString(Noise.NI, nfi), gain.ToString(Noise.NI, nfi));
+            genCode(octaves.ToString(nfi), frequency.Code, lacunarity.Code, persistence.Code);
         }
 
-        public static Module ValueOf(int octaves, float frequency, float lacunarity, float gain) {
-            return new TurbulenceImpl(octaves, frequency, lacunarity, gain);
+        public static NoiseModule ValueOf(int octaves, NoiseModule frequency, NoiseModule lacunarity, NoiseModule persistence)
+        {
+            return new TurbulenceImpl(octaves, frequency, lacunarity, persistence);
         }
 
-        private void genCode(string octaves, string frequency, string lacunarity, string gain) {
-            code = "turbulence(in_pos," + octaves + "," + frequency + "," + lacunarity + "," + gain + ", perm)";
+        private void genCode(string octaves, string frequency, string lacunarity, string persistence)
+        {
+            code = "turbulence(in_pos," + octaves + "," + frequency + "," + lacunarity + "," + persistence + ", perm)";
         }
     }
 }

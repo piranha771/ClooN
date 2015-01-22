@@ -1,12 +1,12 @@
 ﻿
 namespace ClooN.Functions
 {
-    internal class MaxImpl : Module {
-        private MaxImpl(Module module1, Module module2) {
+    internal class MaxImpl : NoiseModule {
+        private MaxImpl(NoiseModule module1, NoiseModule module2) {
             genCode(module1.Code, module2.Code);
         }
 
-        public static Module ValueOf(Module module1, Module module2) {
+        public static NoiseModule ValueOf(NoiseModule module1, NoiseModule module2) {
             return new MaxImpl(module1, module2);
         }
 

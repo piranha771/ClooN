@@ -1,12 +1,12 @@
 ﻿
 namespace ClooN.Functions
 {
-    internal class MinImpl : Module {
-        private MinImpl(Module module1, Module module2) {
+    internal class MinImpl : NoiseModule {
+        private MinImpl(NoiseModule module1, NoiseModule module2) {
             genCode(module1.Code, module2.Code);
         }
 
-        public static Module ValueOf(Module module1, Module module2) {
+        public static NoiseModule ValueOf(NoiseModule module1, NoiseModule module2) {
             return new MinImpl(module1, module2);
         }
 

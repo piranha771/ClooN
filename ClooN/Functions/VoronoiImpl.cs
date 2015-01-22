@@ -3,17 +3,18 @@ using System.Globalization;
 
 namespace ClooN.Functions
 {
-    internal class VoronoiImpl : Module {
+    internal class VoronoiImpl : NoiseModule {
 
-        private VoronoiImpl(float frequency, VoronoiType type) {
+        private VoronoiImpl(NoiseModule frequency, VoronoiType type) {
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberGroupSeparator = "";
             nfi.NumberDecimalSeparator = ".";
 
-            genCode(frequency.ToString(Noise.NI, nfi), getVoronoiFunction(type));
+            genCode(frequency.Code, getVoronoiFunction(type));
         }
 
-        public static Module ValueOf(float frequency, VoronoiType type) {
+        public static NoiseModule ValueOf(NoiseModule frequency, VoronoiType type)
+        {
             return new VoronoiImpl(frequency, type);
         }
 

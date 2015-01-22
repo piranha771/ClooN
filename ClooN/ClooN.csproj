@@ -39,6 +39,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -53,7 +55,7 @@
     <Compile Include="Functions\LerpImpl.cs" />
     <Compile Include="Functions\MaxImpl.cs" />
     <Compile Include="Functions\MinImpl.cs" />
-    <Compile Include="Functions\Module.cs" />
+    <Compile Include="NoiseModule.cs" />
     <Compile Include="Functions\MultiplyImpl.cs" />
     <Compile Include="Functions\PowerImpl.cs" />
     <Compile Include="Functions\RidgedMultifractalImpl.cs" />
@@ -61,7 +63,6 @@
     <Compile Include="Functions\SubtractImpl.cs" />
     <Compile Include="Functions\TurbulenceImpl.cs" />
     <Compile Include="Functions\VoronoiImpl.cs" />
-    <Compile Include="IModule.cs" />
     <Compile Include="Noise.cs" />
     <Compile Include="NoiseProgram.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

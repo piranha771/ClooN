@@ -1,12 +1,12 @@
 ﻿
 namespace ClooN.Functions
 {
-    internal class RoundImpl : Module {
-        private RoundImpl(Module module) {
+    internal class RoundImpl : NoiseModule {
+        private RoundImpl(NoiseModule module) {
             genCode(module.Code);
         }
 
-        public static Module ValueOf(Module module) {
+        public static NoiseModule ValueOf(NoiseModule module) {
             return new RoundImpl(module);
         }
 

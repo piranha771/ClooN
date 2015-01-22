@@ -1,15 +1,15 @@
 ﻿namespace ClooN.Functions
 {
-    internal class MultiplyImpl : Module {
-        private MultiplyImpl(Module ls, Module rs) {
+    internal class MultiplyImpl : NoiseModule {
+        private MultiplyImpl(NoiseModule ls, NoiseModule rs) {
             genCode(ls, rs);
         }
 
-        public static Module ValueOf(Module ls, Module rs) {
+        public static NoiseModule ValueOf(NoiseModule ls, NoiseModule rs) {
             return new MultiplyImpl(ls, rs);
         }
 
-        private void genCode(Module ls, Module rs) {
+        private void genCode(NoiseModule ls, NoiseModule rs) {
             code = "("+ls.Code + " * " + rs.Code+")";
         }
     }

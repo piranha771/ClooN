@@ -14,31 +14,37 @@ namespace ClooN
     {
 
         private bool disposed = false;
-        private object sync = new object();
 
         private const int PermSize = 256;
 
         private ComputeContext context;
         private ComputeKernel kernel;
 
-        private Module module;
+        private NoiseModule module;
         private int[] permutation;
         private int lastSeed;
 
         private string completeSource;
 
+        /// <summary>
+        /// Contains the complete sourcecode that is compiled and processed by the ClDevice
+        /// </summary>
         public string CompleteSource
         {
             get { return completeSource; }
         }
 
-        public NoiseProgram(IModule module)
+        /// <summary>
+        /// Creates a new noise program that uses a noisemodule
+        /// </summary>
+        /// <param name="module"></param>
+        public NoiseProgram(NoiseModule module)
         {
-            this.module = (Module)module;
+            this.module = (NoiseModule)module;
         }
 
         /// <summary>
-        /// Compiles the computer shader
+        /// Compiles the OpenCL program on the first availble platform
         /// </summary>
         public void Compile()
         {
@@ -46,14 +52,15 @@ namespace ClooN
         }
 
         /// <summary>
-        /// Compiles the computer shader
+        /// Compiles the OpenCL program on the first availble platform
         /// </summary>
+        /// <param name="platform">The platform to run this program on</param>
         public void Compile(ComputePlatform platform) {
             
             if (context != null) return;
 
             // Creating context on platform
-            context = new ComputeContext(ComputeDeviceTypes.Gpu, new ComputeContextPropertyList(platform), null, IntPtr.Zero); // CPU Fallback?
+            context = new ComputeContext(ComputeDeviceTypes.All, new ComputeContextPropertyList(platform), null, IntPtr.Zero); // CPU Fallback?
 
             // Reading the static source file
             string include = Resources.noise;
@@ -77,44 +84,41 @@ namespace ClooN
         /// <summary>
         /// Computes noise values for given vectors
         /// </summary>
-        /// <param name="input">3d input vector/param>
+        /// <param name="input">3d input vector</param>
+        /// <param name="seed">initial state for the random generator</param>
         /// <returns>Noise results</returns>
         public float[] GetValues(Single3[] input, int seed) {
+            if (context == null || kernel == null) throw new Exception("Compile first!");
 
-            lock (sync)
+
+            int inputLength = input.Length;
+            float[] output = new float[inputLength];
+
+            // Setup perm buffer
+            // .. if not exists for this seed
+            if (permutation == null || lastSeed != seed)
             {
-                if (context == null || kernel == null) throw new Exception("Compile first!");
-
-
-                int inputLength = input.Length;
-                float[] output = new float[inputLength];
-
-                // Setup perm buffer
-                // .. if not exists for this seed
-                if (permutation == null || lastSeed != seed)
-                {
-                    generatePermutation(PermSize, seed);
-                    lastSeed = seed;
-                }
-
-                // Setup IO Buffers
-                Cloo.ComputeBuffer<Single3> bufIn = new Cloo.ComputeBuffer<Single3>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, input);
-                Cloo.ComputeBuffer<int> bufPerm = new Cloo.ComputeBuffer<int>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, permutation);
-                Cloo.ComputeBuffer<float> bufOut = new Cloo.ComputeBuffer<float>(context, ComputeMemoryFlags.WriteOnly, output.Length);
-                // Arrange params
-                kernel.SetMemoryArgument(0, bufIn);
-                kernel.SetMemoryArgument(1, bufPerm);
-                kernel.SetMemoryArgument(2, bufOut);
-                // Setup command
-                ComputeEventList event_list = new ComputeEventList();
-                ComputeCommandQueue commands = new ComputeCommandQueue(context, context.Devices[0], ComputeCommandQueueFlags.None);
-                // Exec and read
-                commands.Execute(kernel, null, new long[] { input.Length }, null, event_list);
-                commands.ReadFromBuffer(bufOut, ref output, false, event_list);
-                commands.Finish();
-
-                return output;
+                generatePermutation(PermSize, seed);
+                lastSeed = seed;
             }
+
+            // Setup IO Buffers
+            ComputeBuffer<Single3> bufIn = new Cloo.ComputeBuffer<Single3>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, input);
+            ComputeBuffer<int> bufPerm = new Cloo.ComputeBuffer<int>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, permutation);
+            ComputeBuffer<float> bufOut = new Cloo.ComputeBuffer<float>(context, ComputeMemoryFlags.WriteOnly, output.Length);
+            // Arrange params
+            kernel.SetMemoryArgument(0, bufIn);
+            kernel.SetMemoryArgument(1, bufPerm);
+            kernel.SetMemoryArgument(2, bufOut);
+            // Setup command
+            ComputeEventList event_list = new ComputeEventList();
+            ComputeCommandQueue commands = new ComputeCommandQueue(context, context.Devices[0], ComputeCommandQueueFlags.None);
+            // Exec and read
+            commands.Execute(kernel, null, new long[] { input.Length }, null, event_list);
+            commands.ReadFromBuffer(bufOut, ref output, false, event_list);
+            commands.Finish();
+
+            return output;
         }
 
 
@@ -122,6 +126,7 @@ namespace ClooN
         /// Creates random permutation array, random values have no duplicates and are not higher than array length
         /// </summary>
         /// <param name="size">size of permutation array</param>
+        /// <param name="seed">initial state for the random generator</param>
         private void generatePermutation(int size, int seed) {
             permutation = new int[size];
             Rnd random = new Rnd(seed);

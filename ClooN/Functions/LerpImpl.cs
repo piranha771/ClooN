@@ -1,12 +1,12 @@
 ﻿
 namespace ClooN.Functions
 {
-    internal class LerpImpl : Module {
-        private LerpImpl(Module min, Module max, Module interpolant) {
+    internal class LerpImpl : NoiseModule {
+        private LerpImpl(NoiseModule min, NoiseModule max, NoiseModule interpolant) {
             genCode(min.Code, max.Code, interpolant.Code);
         }
 
-        public static Module ValueOf(Module min, Module max, Module interpolant) {
+        public static NoiseModule ValueOf(NoiseModule min, NoiseModule max, NoiseModule interpolant) {
             return new LerpImpl(min, max, interpolant);
         }
 

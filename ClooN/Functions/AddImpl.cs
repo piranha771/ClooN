@@ -1,16 +1,16 @@
 ﻿namespace ClooN.Functions
 {
-    internal class AddImpl : Module {
-        private AddImpl(Module ls, Module rs) {
+    internal class AddImpl : NoiseModule {
+        private AddImpl(NoiseModule ls, NoiseModule rs) {
             genCode(ls.Code, rs.Code);
         }
 
-        public static Module ValueOf(Module ls, Module rs) {
+        public static NoiseModule ValueOf(NoiseModule ls, NoiseModule rs) {
             return new AddImpl(ls, rs);
         }
 
         private void genCode(string ls, string rs) {
-            code = "("+ls + " + " + rs+")";
+            code = "("+ ls + " + " + rs +")";
         }
     }
 }

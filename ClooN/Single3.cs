@@ -1,5 +1,8 @@
 ﻿namespace ClooN
 {
+    /// <summary>
+    /// Stores 3d coordinate 
+    /// </summary>
     public struct Single3
     {
         public float X, Y, Z;

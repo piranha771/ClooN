@@ -2,24 +2,27 @@
 
 namespace ClooN.Functions
 {
-    internal class RidgedMultifractalImpl : Module {
+    internal class RidgedMultifractalImpl : NoiseModule {
 
-        private RidgedMultifractalImpl(int octaves, float frequency, float lacunarity, float gain, float offset) {
+        private RidgedMultifractalImpl(int octaves, NoiseModule frequency, NoiseModule lacunarity, NoiseModule persistence, NoiseModule offset)
+        {
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberGroupSeparator = "";
             nfi.NumberDecimalSeparator = ".";
 
 
-            genCode(octaves.ToString(nfi), frequency.ToString(Noise.NI, nfi), lacunarity.ToString(Noise.NI, nfi), gain.ToString(Noise.NI, nfi), offset.ToString(Noise.NI, nfi));
+            genCode(octaves.ToString(nfi), frequency.Code, lacunarity.Code, persistence.Code, offset.Code);
 
         }
 
-        public static Module ValueOf(int octaves, float frequency, float lacunarity, float gain, float offset) {
-            return new RidgedMultifractalImpl(octaves, frequency, lacunarity, gain, offset);
+        public static NoiseModule ValueOf(int octaves, NoiseModule frequency, NoiseModule lacunarity, NoiseModule persistence, NoiseModule offset)
+        {
+            return new RidgedMultifractalImpl(octaves, frequency, lacunarity, persistence, offset);
         }
 
-        private void genCode(string octaves, string frequency, string lacunarity, string gain, string offset) {
-            code = "ridgedMultifractal(in_pos," + octaves + "," + frequency + "," + lacunarity + "," + gain + "," + offset + ", perm)";
+        private void genCode(string octaves, string frequency, string lacunarity, string persistence, string offset)
+        {
+            code = "ridgedMultifractal(in_pos," + octaves + "," + frequency + "," + lacunarity + "," + persistence + "," + offset + ", perm)";
 
         }
         
