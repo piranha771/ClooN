@@ -18,7 +18,8 @@ namespace ClooN
         private const int PermSize = 256;
 
         private ComputeContext context;
-        private ComputeKernel kernel;
+        private ComputeKernel kernelExplicit;
+        private ComputeKernel kernelImplicit;
 
         private NoiseModule module;
         private int[] permutation;
@@ -71,14 +72,20 @@ namespace ClooN
             __kernel void cl_main(__global Single3 *input, __global int *perm, __global float *output) { 
                 int index = get_global_id(0);
                 Single3 in_pos = input[index];      
-                output[index] = "+ module.Code +@";
-            }";
+                output[index] = "+ module.Code + @";
+            }
 
+            __kernel void cl_main_range(ImplicitCube cube, __global int *perm, __global float *output) {
+                int index = get_global_id(0) + cube.lengthX * (get_global_id(1) + cube.lengthZ * get_global_id(2)) ;
+                Single3 in_pos = { cube.startX + get_global_id(0) * cube.offsetX, cube.startY + get_global_id(1) * cube.offsetY, cube.startZ + get_global_id(2) * cube.offsetZ };
+                output[index] = " + module.Code + @";
+            }";
             completeSource = include + stub;
 
             ComputeProgram program = new ComputeProgram(context, completeSource);
             program.Build(context.Platform.Devices, null, null, IntPtr.Zero);
-            kernel = program.CreateKernel("cl_main");
+            kernelExplicit = program.CreateKernel("cl_main");
+            kernelImplicit = program.CreateKernel("cl_main_range");
         }
 
         /// <summary>
@@ -88,7 +95,7 @@ namespace ClooN
         /// <param name="seed">initial state for the random generator</param>
         /// <returns>Noise results</returns>
         public float[] GetValues(Single3[] input, int seed) {
-            if (context == null || kernel == null) throw new Exception("Compile first!");
+            if (context == null || kernelExplicit == null) throw new Exception("Compile first!");
 
 
             int inputLength = input.Length;
@@ -107,14 +114,55 @@ namespace ClooN
             ComputeBuffer<int> bufPerm = new Cloo.ComputeBuffer<int>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, permutation);
             ComputeBuffer<float> bufOut = new Cloo.ComputeBuffer<float>(context, ComputeMemoryFlags.WriteOnly, output.Length);
             // Arrange params
-            kernel.SetMemoryArgument(0, bufIn);
-            kernel.SetMemoryArgument(1, bufPerm);
-            kernel.SetMemoryArgument(2, bufOut);
+            kernelExplicit.SetMemoryArgument(0, bufIn);
+            kernelExplicit.SetMemoryArgument(1, bufPerm);
+            kernelExplicit.SetMemoryArgument(2, bufOut);
             // Setup command
             ComputeEventList event_list = new ComputeEventList();
             ComputeCommandQueue commands = new ComputeCommandQueue(context, context.Devices[0], ComputeCommandQueueFlags.None);
             // Exec and read
-            commands.Execute(kernel, null, new long[] { input.Length }, null, event_list);
+            commands.Execute(kernelExplicit, null, new long[] { input.Length }, null, event_list);
+            commands.ReadFromBuffer(bufOut, ref output, false, event_list);
+            commands.Finish();
+
+            return output;
+        }
+
+        /// <summary>
+        /// Computes noise values for given vectors
+        /// </summary>
+        /// <param name="input">3d input vector</param>
+        /// <param name="seed">initial state for the random generator</param>
+        /// <returns>Noise results</returns>
+        public float[] GetValues(ref ImplicitCube input, int seed)
+        {
+            if (context == null || kernelImplicit == null) throw new Exception("Compile first!");
+
+
+            int inputLength = input.ValueCount;
+            float[] output = new float[inputLength];
+
+            // Setup perm buffer
+            // .. if not exists for this seed
+            if (permutation == null || lastSeed != seed)
+            {
+                generatePermutation(PermSize, seed);
+                lastSeed = seed;
+            }
+
+            // Setup IO Buffers
+            //ComputeBuffer<ImplicitCube> bufIn = new Cloo.ComputeBuffer<ImplicitCube>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, new ImplicitCube[] { input });
+            ComputeBuffer<int> bufPerm = new Cloo.ComputeBuffer<int>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, permutation);
+            ComputeBuffer<float> bufOut = new Cloo.ComputeBuffer<float>(context, ComputeMemoryFlags.WriteOnly, output.Length);
+            // Arrange params
+            kernelImplicit.SetValueArgument<ImplicitCube>(0, input);
+            kernelImplicit.SetMemoryArgument(1, bufPerm);
+            kernelImplicit.SetMemoryArgument(2, bufOut);
+            // Setup command
+            ComputeEventList event_list = new ComputeEventList();
+            ComputeCommandQueue commands = new ComputeCommandQueue(context, context.Devices[0], ComputeCommandQueueFlags.None);
+            // Exec and read
+            commands.Execute(kernelImplicit, null, new long[] { input.LengthX, input.LengthY, input.LengthZ }, null, event_list);
             commands.ReadFromBuffer(bufOut, ref output, false, event_list);
             commands.Finish();
 

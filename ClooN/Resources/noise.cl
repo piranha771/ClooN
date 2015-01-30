@@ -5,6 +5,18 @@ typedef struct
     float z;
 } Single3;
 
+typedef struct
+{
+	float startX;
+    float offsetX;
+	int lengthX;
+    float startY;
+    float offsetY;
+	int lengthY;
+    float startZ;
+    float offsetZ;
+	int lengthZ;
+} ImplicitCube;
 
 __constant float g[] = {
 1,1,0, -1,1,0, 1,-1,0, -1,-1,0,

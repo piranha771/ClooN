@@ -42,6 +42,9 @@
             this.labelVendor = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.radioButtonImplicit = new System.Windows.Forms.RadioButton();
+            this.radioButtonExplicit = new System.Windows.Forms.RadioButton();
+            this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.textBoxSeed = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -81,7 +84,6 @@
             this.timerButtonDown = new System.Windows.Forms.Timer(this.components);
             this.pictureBoxResult = new System.Windows.Forms.PictureBox();
             this.boxCode = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
             this.groupBoxDeviceInfo.SuspendLayout();
             this.panel1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -201,6 +203,8 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.panel1.Controls.Add(this.radioButtonImplicit);
+            this.panel1.Controls.Add(this.radioButtonExplicit);
             this.panel1.Controls.Add(this.label8);
             this.panel1.Controls.Add(this.label7);
             this.panel1.Controls.Add(this.textBoxSeed);
@@ -220,8 +224,40 @@
             this.panel1.Controls.Add(this.groupBoxDeviceInfo);
             this.panel1.Location = new System.Drawing.Point(12, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(256, 418);
+            this.panel1.Size = new System.Drawing.Size(256, 439);
             this.panel1.TabIndex = 4;
+            // 
+            // radioButtonImplicit
+            // 
+            this.radioButtonImplicit.AutoSize = true;
+            this.radioButtonImplicit.Checked = true;
+            this.radioButtonImplicit.Location = new System.Drawing.Point(6, 203);
+            this.radioButtonImplicit.Name = "radioButtonImplicit";
+            this.radioButtonImplicit.Size = new System.Drawing.Size(84, 17);
+            this.radioButtonImplicit.TabIndex = 35;
+            this.radioButtonImplicit.TabStop = true;
+            this.radioButtonImplicit.Text = "Implicit Input";
+            this.radioButtonImplicit.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonExplicit
+            // 
+            this.radioButtonExplicit.AutoSize = true;
+            this.radioButtonExplicit.Location = new System.Drawing.Point(6, 226);
+            this.radioButtonExplicit.Name = "radioButtonExplicit";
+            this.radioButtonExplicit.Size = new System.Drawing.Size(85, 17);
+            this.radioButtonExplicit.TabIndex = 34;
+            this.radioButtonExplicit.Text = "Explicit Input";
+            this.radioButtonExplicit.UseVisualStyleBackColor = true;
+            // 
+            // label8
+            // 
+            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(9, 402);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(130, 13);
+            this.label8.TabIndex = 33;
+            this.label8.Text = "Available operators: + - * /";
             // 
             // label7
             // 
@@ -246,7 +282,7 @@
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(-3, 402);
+            this.label6.Location = new System.Drawing.Point(-3, 423);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(52, 13);
             this.label6.TabIndex = 6;
@@ -255,7 +291,7 @@
             // buttonRound
             // 
             this.buttonRound.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonRound.Location = new System.Drawing.Point(150, 375);
+            this.buttonRound.Location = new System.Drawing.Point(150, 396);
             this.buttonRound.Name = "buttonRound";
             this.buttonRound.Size = new System.Drawing.Size(100, 24);
             this.buttonRound.TabIndex = 30;
@@ -267,7 +303,7 @@
             // 
             this.buttonPower.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.buttonPower.BackColor = System.Drawing.SystemColors.Control;
-            this.buttonPower.Location = new System.Drawing.Point(150, 346);
+            this.buttonPower.Location = new System.Drawing.Point(150, 367);
             this.buttonPower.Name = "buttonPower";
             this.buttonPower.Size = new System.Drawing.Size(100, 23);
             this.buttonPower.TabIndex = 29;
@@ -278,7 +314,7 @@
             // buttonMax
             // 
             this.buttonMax.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonMax.Location = new System.Drawing.Point(150, 315);
+            this.buttonMax.Location = new System.Drawing.Point(150, 336);
             this.buttonMax.Name = "buttonMax";
             this.buttonMax.Size = new System.Drawing.Size(100, 24);
             this.buttonMax.TabIndex = 28;
@@ -289,7 +325,7 @@
             // buttonMin
             // 
             this.buttonMin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonMin.Location = new System.Drawing.Point(150, 284);
+            this.buttonMin.Location = new System.Drawing.Point(150, 305);
             this.buttonMin.Name = "buttonMin";
             this.buttonMin.Size = new System.Drawing.Size(100, 25);
             this.buttonMin.TabIndex = 27;
@@ -300,7 +336,7 @@
             // buttonLerp
             // 
             this.buttonLerp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonLerp.Location = new System.Drawing.Point(150, 254);
+            this.buttonLerp.Location = new System.Drawing.Point(150, 275);
             this.buttonLerp.Name = "buttonLerp";
             this.buttonLerp.Size = new System.Drawing.Size(100, 24);
             this.buttonLerp.TabIndex = 22;
@@ -311,7 +347,7 @@
             // buttonAbs
             // 
             this.buttonAbs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonAbs.Location = new System.Drawing.Point(150, 225);
+            this.buttonAbs.Location = new System.Drawing.Point(150, 246);
             this.buttonAbs.Name = "buttonAbs";
             this.buttonAbs.Size = new System.Drawing.Size(100, 24);
             this.buttonAbs.TabIndex = 21;
@@ -322,7 +358,7 @@
             // buttonVoronoi
             // 
             this.buttonVoronoi.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonVoronoi.Location = new System.Drawing.Point(6, 315);
+            this.buttonVoronoi.Location = new System.Drawing.Point(6, 336);
             this.buttonVoronoi.Name = "buttonVoronoi";
             this.buttonVoronoi.Size = new System.Drawing.Size(138, 24);
             this.buttonVoronoi.TabIndex = 19;
@@ -333,7 +369,7 @@
             // buttonTurbulence
             // 
             this.buttonTurbulence.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonTurbulence.Location = new System.Drawing.Point(6, 285);
+            this.buttonTurbulence.Location = new System.Drawing.Point(6, 306);
             this.buttonTurbulence.Name = "buttonTurbulence";
             this.buttonTurbulence.Size = new System.Drawing.Size(138, 24);
             this.buttonTurbulence.TabIndex = 18;
@@ -344,7 +380,7 @@
             // buttonRMF
             // 
             this.buttonRMF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonRMF.Location = new System.Drawing.Point(6, 255);
+            this.buttonRMF.Location = new System.Drawing.Point(6, 276);
             this.buttonRMF.Name = "buttonRMF";
             this.buttonRMF.Size = new System.Drawing.Size(138, 24);
             this.buttonRMF.TabIndex = 17;
@@ -355,7 +391,7 @@
             // buttonFBM
             // 
             this.buttonFBM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonFBM.Location = new System.Drawing.Point(6, 225);
+            this.buttonFBM.Location = new System.Drawing.Point(6, 246);
             this.buttonFBM.Name = "buttonFBM";
             this.buttonFBM.Size = new System.Drawing.Size(138, 24);
             this.buttonFBM.TabIndex = 16;
@@ -373,7 +409,7 @@
             this.labelParseMessage.ForeColor = System.Drawing.Color.Red;
             this.labelParseMessage.Location = new System.Drawing.Point(274, 12);
             this.labelParseMessage.Name = "labelParseMessage";
-            this.labelParseMessage.Size = new System.Drawing.Size(432, 380);
+            this.labelParseMessage.Size = new System.Drawing.Size(432, 401);
             this.labelParseMessage.TabIndex = 6;
             this.labelParseMessage.Text = "Empty module";
             this.labelParseMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -392,7 +428,7 @@
             this.statusLabelCloonTime,
             this.toolStripStatusLabel2,
             this.statusLabelOverhead});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 503);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 524);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(718, 22);
             this.statusStrip1.TabIndex = 7;
@@ -447,7 +483,7 @@
             this.panel2.Controls.Add(this.buttonShiftLeft);
             this.panel2.Controls.Add(this.buttonShiftUp);
             this.panel2.Controls.Add(this.buttonShiftDown);
-            this.panel2.Location = new System.Drawing.Point(274, 398);
+            this.panel2.Location = new System.Drawing.Point(274, 419);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(432, 32);
             this.panel2.TabIndex = 10;
@@ -638,7 +674,7 @@
             this.pictureBoxResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxResult.Location = new System.Drawing.Point(274, 12);
             this.pictureBoxResult.Name = "pictureBoxResult";
-            this.pictureBoxResult.Size = new System.Drawing.Size(432, 380);
+            this.pictureBoxResult.Size = new System.Drawing.Size(432, 401);
             this.pictureBoxResult.TabIndex = 0;
             this.pictureBoxResult.TabStop = false;
             // 
@@ -647,7 +683,7 @@
             this.boxCode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.boxCode.Font = new System.Drawing.Font("Lucida Console", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.boxCode.Location = new System.Drawing.Point(15, 436);
+            this.boxCode.Location = new System.Drawing.Point(15, 457);
             this.boxCode.Multiline = true;
             this.boxCode.Name = "boxCode";
             this.boxCode.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -655,21 +691,11 @@
             this.boxCode.TabIndex = 12;
             this.boxCode.TextChanged += new System.EventHandler(this.boxCode_TextChanged);
             // 
-            // label8
-            // 
-            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(9, 381);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(130, 13);
-            this.label8.TabIndex = 33;
-            this.label8.Text = "Available operators: + - * /";
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(718, 525);
+            this.ClientSize = new System.Drawing.Size(718, 546);
             this.Controls.Add(this.boxCode);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.statusStrip1);
@@ -677,7 +703,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pictureBoxResult);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(734, 564);
+            this.MinimumSize = new System.Drawing.Size(734, 585);
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ClooN Editor";
@@ -751,6 +777,8 @@
         private System.Windows.Forms.Button buttonContrastSub;
         private System.Windows.Forms.TextBox boxCode;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.RadioButton radioButtonImplicit;
+        private System.Windows.Forms.RadioButton radioButtonExplicit;
     }
 }
 

@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -18,7 +19,8 @@ namespace ClooNEditor
 
         private Stopwatch overheadWatch = new Stopwatch();
 
-        private Single3[] query;
+        private Single3[] explicitQuery;
+        private ImplicitCube implicitQuery;
         private bool needRefresh;
 
         private int currentSeed;
@@ -48,6 +50,7 @@ namespace ClooNEditor
             }
             comboBoxDevice.SelectedIndex = 0;
             currentSeed = int.Parse(textBoxSeed.Text);
+            FormMain_Resize(null, null);
         }
 
         private void FillDeviceInfo(ComputePlatform platform)
@@ -136,15 +139,26 @@ namespace ClooNEditor
         {
             overheadWatch.Reset();
             overheadWatch.Start();
-            
-            query = new Single3[pictureBoxResult.Width * pictureBoxResult.Height];
-            Parallel.For(0, pictureBoxResult.Height, y =>
+
+            if (radioButtonExplicit.Checked)
             {
-                for (int x = 0; x < pictureBoxResult.Width; x++)
+                explicitQuery = new Single3[pictureBoxResult.Width * pictureBoxResult.Height];
+                Parallel.For(0, pictureBoxResult.Height, y =>
                 {
-                    query[x + pictureBoxResult.Width * y] = new Single3(((float)x / (float)pictureBoxResult.Width + shiftLeftRight) * zoomFactor - (zoomFactor / 2.0f), ((float)y / (float)pictureBoxResult.Height + shiftUpDown) * zoomFactor - (zoomFactor / 2.0f), layerZ);
-                }
-            });
+                    for (int x = 0; x < pictureBoxResult.Width; x++)
+                    {
+                        explicitQuery[x + pictureBoxResult.Width * y] = new Single3(((float)x / (float)pictureBoxResult.Width + shiftLeftRight) * zoomFactor - (zoomFactor / 2.0f), ((float)y / (float)pictureBoxResult.Height + shiftUpDown) * zoomFactor - (zoomFactor / 2.0f), layerZ);
+                    }
+                });
+            }
+
+            if (radioButtonImplicit.Checked)
+            {
+                int width = pictureBoxResult.Width;
+                int height = pictureBoxResult.Height;
+
+                implicitQuery = new ImplicitCube(0 + shiftLeftRight - (zoomFactor / 2.0f), 1.0f / width * zoomFactor, width, 0 + shiftUpDown - (zoomFactor / 2.0f), 1.0f / height * zoomFactor, height, layerZ, 1, 1);
+            }
             overheadWatch.Stop();
         }
 
@@ -153,7 +167,7 @@ namespace ClooNEditor
             if (program == null) return;
             
             var watch = Stopwatch.StartNew();
-            float[] result = program.GetValues(query, int.Parse(textBoxSeed.Text));
+            float[] result = radioButtonImplicit.Checked ? program.GetValues(ref implicitQuery, int.Parse(textBoxSeed.Text)) : program.GetValues(explicitQuery, int.Parse(textBoxSeed.Text));
             watch.Stop();
             overheadWatch.Start();
             statusLabelCloonTime.Text = watch.ElapsedMilliseconds.ToString() + "ms";
@@ -380,6 +394,7 @@ namespace ClooNEditor
             timerButtonDown.Enabled = false;
         }
         #endregion
+
 
     }
 }
