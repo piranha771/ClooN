@@ -140,6 +140,9 @@ namespace ClooNEditor
             overheadWatch.Reset();
             overheadWatch.Start();
 
+            int width = pictureBoxResult.Width;
+            int height = pictureBoxResult.Height;
+
             if (radioButtonExplicit.Checked)
             {
                 explicitQuery = new Single3[pictureBoxResult.Width * pictureBoxResult.Height];
@@ -147,17 +150,13 @@ namespace ClooNEditor
                 {
                     for (int x = 0; x < pictureBoxResult.Width; x++)
                     {
-                        explicitQuery[x + pictureBoxResult.Width * y] = new Single3(((float)x / (float)pictureBoxResult.Width + shiftLeftRight) * zoomFactor - (zoomFactor / 2.0f), ((float)y / (float)pictureBoxResult.Height + shiftUpDown) * zoomFactor - (zoomFactor / 2.0f), layerZ);
+                        explicitQuery[x + pictureBoxResult.Width * y] = new Single3(((float)x / (float)width * zoomFactor) + shiftLeftRight - (zoomFactor / 2.0f), ((float)y / (float)height * zoomFactor) + shiftUpDown - (zoomFactor / 2.0f), layerZ);
                     }
                 });
             }
-
-            if (radioButtonImplicit.Checked)
+            else 
             {
-                int width = pictureBoxResult.Width;
-                int height = pictureBoxResult.Height;
-
-                implicitQuery = new ImplicitCube(0 + shiftLeftRight - (zoomFactor / 2.0f), 1.0f / width * zoomFactor, width, 0 + shiftUpDown - (zoomFactor / 2.0f), 1.0f / height * zoomFactor, height, layerZ, 1, 1);
+                implicitQuery = new ImplicitCube(shiftLeftRight - (zoomFactor / 2.0f), 1.0f / width * zoomFactor, width, shiftUpDown - (zoomFactor / 2.0f), 1.0f / height * zoomFactor, height, layerZ, 1, 1);
             }
             overheadWatch.Stop();
         }
