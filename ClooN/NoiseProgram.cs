@@ -4,6 +4,8 @@ using Cloo;
 using RndXorshift;
 using ClooN.Functions;
 using ClooN.Properties;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace ClooN
 {
@@ -21,11 +23,37 @@ namespace ClooN
         private ComputeKernel kernelExplicit;
         private ComputeKernel kernelImplicit;
 
+        private ComputeBuffer<int> permutationBuffer;
+        private ComputeBuffer<float> outputBuffer;
+        private ComputeCommandQueue queue;
+
         private NoiseModule module;
-        private int[] permutation;
-        private int lastSeed;
+        private int[] permutationTable = new int[PermSize];
+
+        private int lastLength;
 
         private string completeSource;
+
+        private int seed;
+
+        /// <summary>
+        /// Sets the initial state for the random generator.
+        /// Same seeds will result in the same noise.
+        /// This behavior is not guaranteed over different versions!
+        /// </summary>
+        public int Seed
+        {
+            get
+            {
+                return seed;
+            }
+            set
+            {
+                seed = value;
+                setupPermutationBuffer();
+            }
+        }
+        
 
         /// <summary>
         /// Contains the complete sourcecode that is compiled and processed by the ClDevice
@@ -83,113 +111,119 @@ namespace ClooN
             completeSource = include + stub;
 
             ComputeProgram program = new ComputeProgram(context, completeSource);
-            program.Build(context.Platform.Devices, null, null, IntPtr.Zero);
+            try
+            {
+                program.Build(context.Platform.Devices, null, null, IntPtr.Zero);
+            }
+            catch 
+            {
+                // TODO: Replace this nasty exception re-throwing
+                throw new Exception(program.GetBuildLog(program.Devices[0]));
+            }
+
             kernelExplicit = program.CreateKernel("cl_main");
             kernelImplicit = program.CreateKernel("cl_main_range");
+
+            setupPermutationBuffer();
+            queue = new ComputeCommandQueue(context, context.Devices[0], ComputeCommandQueueFlags.None);
         }
 
         /// <summary>
-        /// Computes noise values for given vectors
+        /// Gets the values for an explicit input
         /// </summary>
-        /// <param name="input">3d input vector</param>
-        /// <param name="seed">initial state for the random generator</param>
-        /// <returns>Noise results</returns>
-        public float[] GetValues(Single3[] input, int seed) {
+        /// <param name="input">The explicit input</param>
+        /// <param name="output">The output values</param>
+        public void GetValues(Single3[] input, ref float[] output)
+        {
             if (context == null || kernelExplicit == null) throw new Exception("Compile first!");
 
-
             int inputLength = input.Length;
-            float[] output = new float[inputLength];
 
-            // Setup perm buffer
-            // .. if not exists for this seed
-            if (permutation == null || lastSeed != seed)
+            // IO length changed
+            if (lastLength != inputLength)
             {
-                generatePermutation(PermSize, seed);
-                lastSeed = seed;
+                lastLength = inputLength;
+                outputBuffer = new Cloo.ComputeBuffer<float>(context, ComputeMemoryFlags.WriteOnly | ComputeMemoryFlags.AllocateHostPointer, inputLength);
+                kernelExplicit.SetMemoryArgument(2, outputBuffer);
             }
 
             // Setup IO Buffers
             ComputeBuffer<Single3> bufIn = new Cloo.ComputeBuffer<Single3>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, input);
-            ComputeBuffer<int> bufPerm = new Cloo.ComputeBuffer<int>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, permutation);
-            ComputeBuffer<float> bufOut = new Cloo.ComputeBuffer<float>(context, ComputeMemoryFlags.WriteOnly, output.Length);
+
             // Arrange params
             kernelExplicit.SetMemoryArgument(0, bufIn);
-            kernelExplicit.SetMemoryArgument(1, bufPerm);
-            kernelExplicit.SetMemoryArgument(2, bufOut);
-            // Setup command
-            ComputeEventList event_list = new ComputeEventList();
-            ComputeCommandQueue commands = new ComputeCommandQueue(context, context.Devices[0], ComputeCommandQueueFlags.None);
-            // Exec and read
-            commands.Execute(kernelExplicit, null, new long[] { input.Length }, null, event_list);
-            commands.ReadFromBuffer(bufOut, ref output, false, event_list);
-            commands.Finish();
 
-            return output;
+            // Exec and read
+            queue.Execute(kernelExplicit, null, new long[] { input.Length }, null, null);
+            GCHandle outHandle = GCHandle.Alloc(output, GCHandleType.Pinned);
+            queue.Read<float>(outputBuffer, true, 0, inputLength, outHandle.AddrOfPinnedObject(), null); // Read saves about 500 - 1000 ticks. Sweet for small queues
+            outHandle.Free();
+
+            queue.Finish();
         }
 
         /// <summary>
-        /// Computes noise values for given vectors
+        /// Gets the values for an implicit input
         /// </summary>
-        /// <param name="input">3d input vector</param>
-        /// <param name="seed">initial state for the random generator</param>
-        /// <returns>Noise results</returns>
-        public float[] GetValues(ref ImplicitCube input, int seed)
+        /// <param name="input">The implicit input</param>
+        /// <param name="output">The implicit values</param>
+        public void GetValues(ref ImplicitCube input, ref float[] output)
         {
             if (context == null || kernelImplicit == null) throw new Exception("Compile first!");
 
-
             int inputLength = input.ValueCount;
-            float[] output = new float[inputLength];
 
-            // Setup perm buffer
-            // .. if not exists for this seed
-            if (permutation == null || lastSeed != seed)
+            // IO length changed
+            if (lastLength != inputLength)
             {
-                generatePermutation(PermSize, seed);
-                lastSeed = seed;
+                lastLength = inputLength;
+                outputBuffer = new Cloo.ComputeBuffer<float>(context, ComputeMemoryFlags.WriteOnly | ComputeMemoryFlags.AllocateHostPointer, inputLength);
+                kernelImplicit.SetMemoryArgument(2, outputBuffer);
             }
 
-            // Setup IO Buffers
-            //ComputeBuffer<ImplicitCube> bufIn = new Cloo.ComputeBuffer<ImplicitCube>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, new ImplicitCube[] { input });
-            ComputeBuffer<int> bufPerm = new Cloo.ComputeBuffer<int>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, permutation);
-            ComputeBuffer<float> bufOut = new Cloo.ComputeBuffer<float>(context, ComputeMemoryFlags.WriteOnly, output.Length);
-            // Arrange params
-            kernelImplicit.SetValueArgument<ImplicitCube>(0, input);
-            kernelImplicit.SetMemoryArgument(1, bufPerm);
-            kernelImplicit.SetMemoryArgument(2, bufOut);
-            // Setup command
-            ComputeEventList event_list = new ComputeEventList();
-            ComputeCommandQueue commands = new ComputeCommandQueue(context, context.Devices[0], ComputeCommandQueueFlags.None);
+            // Arrange input param
+            kernelImplicit.SetValueArgument<ImplicitCube>(0, input);           
+            
             // Exec and read
-            commands.Execute(kernelImplicit, null, new long[] { input.LengthX, input.LengthY, input.LengthZ }, null, event_list);
-            commands.ReadFromBuffer(bufOut, ref output, false, event_list);
-            commands.Finish();
+            queue.Execute(kernelImplicit, null, new long[] { input.LengthX, input.LengthY, input.LengthZ }, null, null);
+            GCHandle outHandle = GCHandle.Alloc(output, GCHandleType.Pinned); 
+            queue.Read<float>(outputBuffer, true, 0, inputLength, outHandle.AddrOfPinnedObject(), null); // Read saves about 500 - 1000 ticks. Sweet for small queues
+            outHandle.Free();
 
-            return output;
+            queue.Finish();
         }
 
+        private void setupPermutationBuffer() 
+        {        
+            if (context != null) {
+                generatePermutation(seed);
+                permutationBuffer = new Cloo.ComputeBuffer<int>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, permutationTable);
+                kernelExplicit.SetMemoryArgument(1, permutationBuffer); 
+                kernelImplicit.SetMemoryArgument(1, permutationBuffer);  
+            }             
+        }
 
         /// <summary>
-        /// Creates random permutation array, random values have no duplicates and are not higher than array length
+        /// Creates random permutationTable array, random values have no duplicates and are not higher than array length
         /// </summary>
-        /// <param name="size">size of permutation array</param>
         /// <param name="seed">initial state for the random generator</param>
-        private void generatePermutation(int size, int seed) {
-            permutation = new int[size];
+        private void generatePermutation(int seed) {
             Rnd random = new Rnd(seed);
 
-            List<int> permList = new List<int>(size);
-            for (int i = 0; i < size; i++) permList.Add(i);
+            List<int> permList = new List<int>(PermSize);
+            for (int i = 0; i < PermSize; i++) permList.Add(i);
 
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < PermSize; i++)
             {
                 int index = random.Next(0, permList.Count);
-                permutation[i] = permList[index];
+                permutationTable[i] = permList[index];
                 permList.RemoveAt(index);
             }
         }
 
+        /// <summary>
+        /// Disposes the OpenCL context
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);

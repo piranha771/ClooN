@@ -55,6 +55,7 @@
     <Compile Include="Functions\LerpImpl.cs" />
     <Compile Include="Functions\MaxImpl.cs" />
     <Compile Include="Functions\MinImpl.cs" />
+    <Compile Include="Functions\StepImpl.cs" />
     <Compile Include="ImplicitCube.cs" />
     <Compile Include="NoiseModule.cs" />
     <Compile Include="Functions\MultiplyImpl.cs" />

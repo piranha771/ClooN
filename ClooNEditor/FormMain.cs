@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -24,13 +25,13 @@ namespace ClooNEditor
         private bool needRefresh;
 
         private int currentSeed;
+        private float[] result;
 
         private float shiftLeftRight = 0;
         private float shiftUpDown = 0;
         private float zoomFactor = 1.0f;
-        private float layerZ = 1.0f;
+        private float layerZ = 0.0f;
         private float contrast = 1.0f;
-
 
 
         public FormMain()
@@ -38,6 +39,21 @@ namespace ClooNEditor
             InitializeComponent();
             CreateResultQuery();
             textBoxSeed.Text = new Random().Next().ToString();
+
+            FixCoordLabel(labelCoordTL);
+            FixCoordLabel(labelCoordTR);
+            FixCoordLabel(labelCoordBL);
+            FixCoordLabel(labelCoordBR);
+            FixCoordLabel(labelCoordsZ);
+        }
+
+        private void FixCoordLabel(Label label)
+        {
+            var pos = this.PointToScreen(label.Location);
+            pos = pictureBoxResult.PointToClient(pos);
+            label.Parent = pictureBoxResult;
+            label.Location = pos;
+            label.BackColor = Color.Transparent;
         }
 
         private void FormMain_Shown(object sender, EventArgs e)
@@ -48,9 +64,11 @@ namespace ClooNEditor
                 comboBoxDevice.Items.Add(platform);
                 comboBoxDevice.DisplayMember = "Name";
             }
+            // Initialize start values
             comboBoxDevice.SelectedIndex = 0;
             currentSeed = int.Parse(textBoxSeed.Text);
             FormMain_Resize(null, null);
+            FormMain_ResizeEnd(null, null);
         }
 
         private void FillDeviceInfo(ComputePlatform platform)
@@ -68,19 +86,20 @@ namespace ClooNEditor
             needRefresh = true;
         }
 
+        #region Module Buttons
         private void buttonFBM_Click(object sender, EventArgs e)
         {
-            Insert("fbm(6, 1.0, 2.0, 0.5)");
+            Insert("fbm(6, 1.0, 2.13727, 0.507123)");
         }
 
         private void buttonRMF_Click(object sender, EventArgs e)
         {
-            Insert("rmf(6, 1.0, 2.0, 0.6, 1.0)");
+            Insert("rmf(6, 1.0, 2.13727, 0.607123, 1.0)");
         }
 
         private void buttonTurbulence_Click(object sender, EventArgs e)
         {
-            Insert("turbu(6, 1.0, 2.0, 0.5)");
+            Insert("turbu(6, 1.0, 2.13727, 0.507123)");
         }
 
         private void buttonVoronoi_Click(object sender, EventArgs e)
@@ -118,6 +137,11 @@ namespace ClooNEditor
             Insert("rnd(  )");
         }
 
+        private void buttonStep_Click(object sender, EventArgs e)
+        {
+            Insert("step(  )");
+        }
+
         private void Insert(string code)
         {
             if (boxCode.SelectionLength > 0) // Replace
@@ -134,7 +158,9 @@ namespace ClooNEditor
                 boxCode.SelectionStart += code.Length;
             }
         }
+        #endregion
 
+        #region Compute
         private void CreateResultQuery()
         {
             overheadWatch.Reset();
@@ -142,6 +168,16 @@ namespace ClooNEditor
 
             int width = pictureBoxResult.Width;
             int height = pictureBoxResult.Height;
+
+            implicitQuery = new ImplicitCube(shiftLeftRight - (zoomFactor / 2.0f), 1.0f / width * zoomFactor, width, shiftUpDown - (zoomFactor / 2.0f), 1.0f / height * zoomFactor, height, layerZ, 1, 1);
+
+            string precision = "0.0000000";
+            labelCoordTL.Text = implicitQuery.StartX.ToString(precision) + "/" + implicitQuery.StartY.ToString(precision);
+            labelCoordTR.Text = (implicitQuery.StartX + (implicitQuery.OffsetX * implicitQuery.LengthX)).ToString(precision) + "/" + implicitQuery.StartY.ToString(precision);
+            labelCoordBL.Text = implicitQuery.StartX.ToString(precision) + "/" + (implicitQuery.StartY + +(implicitQuery.OffsetY * implicitQuery.LengthY)).ToString(precision);
+            labelCoordBR.Text = (implicitQuery.StartX + (implicitQuery.OffsetX * implicitQuery.LengthX)).ToString(precision) + "/" + (implicitQuery.StartY + +(implicitQuery.OffsetY * implicitQuery.LengthY)).ToString(precision);
+            labelCoordsZ.Text = "Z: " + implicitQuery.StartZ.ToString(precision);
+
 
             if (radioButtonExplicit.Checked)
             {
@@ -154,19 +190,28 @@ namespace ClooNEditor
                     }
                 });
             }
-            else 
-            {
-                implicitQuery = new ImplicitCube(shiftLeftRight - (zoomFactor / 2.0f), 1.0f / width * zoomFactor, width, shiftUpDown - (zoomFactor / 2.0f), 1.0f / height * zoomFactor, height, layerZ, 1, 1);
-            }
+
             overheadWatch.Stop();
         }
 
         public void RunResult()
         {
             if (program == null) return;
-            
+            if (result.Length !=  pictureBoxResult.Width * pictureBoxResult.Height)
+            {
+                result = new float[pictureBoxResult.Width * pictureBoxResult.Height];
+            }
+
             var watch = Stopwatch.StartNew();
-            float[] result = radioButtonImplicit.Checked ? program.GetValues(ref implicitQuery, int.Parse(textBoxSeed.Text)) : program.GetValues(explicitQuery, int.Parse(textBoxSeed.Text));
+            
+            if (radioButtonImplicit.Checked)
+            {
+                program.GetValues(ref implicitQuery, ref result);
+            } 
+            else 
+            {
+                program.GetValues(explicitQuery, ref result);
+            }
             watch.Stop();
             overheadWatch.Start();
             statusLabelCloonTime.Text = watch.ElapsedMilliseconds.ToString() + "ms";
@@ -224,7 +269,9 @@ namespace ClooNEditor
                 labelParseMessage.Text = string.Empty;
                 labelParseMessage.Visible = false;
 
+                if (program != null) program.Dispose();
                 program = new NoiseProgram(compiler.LastSuccessful);
+                program.Seed = currentSeed;
                 program.Compile((ComputePlatform)comboBoxDevice.SelectedItem);
                 RunResult();
             }
@@ -234,17 +281,21 @@ namespace ClooNEditor
                 labelParseMessage.Visible = true;
             }
         }
+        #endregion Compute
 
+        #region Resize
         private void FormMain_Resize(object sender, EventArgs e)
         {
             statusLabelResolution.Text = string.Format("Res: {0}x{1} ({2}MP)", pictureBoxResult.Width, pictureBoxResult.Height, ((float)(pictureBoxResult.Width * pictureBoxResult.Height) / 1000000).ToString("0.0"));
         }
 
         private void FormMain_ResizeEnd(object sender, EventArgs e)
-        {
+        {         
             CreateResultQuery();
+            result = new float[implicitQuery.ValueCount];
             needRefresh = true;
         }
+        #endregion
 
         private void boxCode_TextChanged(object sender, EventArgs e)
         {
@@ -265,13 +316,13 @@ namespace ClooNEditor
         }
 
         #region Modifier Buttons
-
         private void buttonResetPosition_Click(object sender, EventArgs e)
         {
             shiftUpDown = 0.0f;
             shiftLeftRight = 0.0f;
-            layerZ = 1.0f;
+            layerZ = 0f;
             zoomFactor = 1.0f;
+            contrast = 1.0f;
             CreateResultQuery();
             RunResult();
         }
@@ -284,6 +335,15 @@ namespace ClooNEditor
         private void buttonExport_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(compiler.LastValidCode);
+        }
+
+        private void buttonShowCoords_Click(object sender, EventArgs e)
+        {
+            labelCoordTL.Visible = !labelCoordTL.Visible;
+            labelCoordTR.Visible = !labelCoordTR.Visible;
+            labelCoordBL.Visible = !labelCoordBL.Visible;
+            labelCoordBR.Visible = !labelCoordBR.Visible;
+            labelCoordsZ.Visible = !labelCoordsZ.Visible;
         }
 
         private void buttonShiftLeft_MouseDown(object sender, MouseEventArgs e)
@@ -351,16 +411,16 @@ namespace ClooNEditor
             switch (modifier)
             {
                 case Modifier.Up:
-                    shiftUpDown -= 0.1f;
+                    shiftUpDown -= (0.1f * zoomFactor);
                     break;
                 case Modifier.Down:
-                    shiftUpDown += 0.1f;
+                    shiftUpDown += (0.1f * zoomFactor);
                     break;
                 case Modifier.Left:
-                    shiftLeftRight -= 0.1f;
+                    shiftLeftRight -= (0.1f * zoomFactor);
                     break;
                 case Modifier.Right:
-                    shiftLeftRight += 0.1f;
+                    shiftLeftRight += (0.1f * zoomFactor);
                     break;
                 case Modifier.ZUp:
                     layerZ += 0.03f;
@@ -394,6 +454,21 @@ namespace ClooNEditor
         }
         #endregion
 
+        private void radioButtonImplicit_CheckedChanged(object sender, EventArgs e)
+        {
+            CreateResultQuery();
+            needRefresh = true;
+        }
 
+        private void radioButtonExplicit_CheckedChanged(object sender, EventArgs e)
+        {
+            CreateResultQuery();
+            needRefresh = true;
+        }
+
+        private void statusLabelAbout_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://codedrain.net/");
+        }
     }
 }

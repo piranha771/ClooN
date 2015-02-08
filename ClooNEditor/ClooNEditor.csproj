@@ -120,6 +120,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\map.png" />
     <None Include="Resources\contrast_add.png" />
     <None Include="Resources\contrast_sub.png" />
     <Content Include="Resources\favicon.ico" />

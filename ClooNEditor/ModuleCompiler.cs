@@ -56,6 +56,7 @@ namespace ClooNEditor
             result = Regex.Replace(result, "max\\(", "Noise.Max(", RegexOptions.IgnoreCase);
             result = Regex.Replace(result, "pow\\(", "Noise.Power(", RegexOptions.IgnoreCase);
             result = Regex.Replace(result, "rnd\\(", "Noise.Round(", RegexOptions.IgnoreCase);
+            result = Regex.Replace(result, "step\\(", "Noise.Step(", RegexOptions.IgnoreCase);
 
             result = Regex.Replace(result, "(,|\\s)Cell", "VoronoiType.Cell", RegexOptions.IgnoreCase);
             result = Regex.Replace(result, "(,|\\s)F1", "VoronoiType.F1", RegexOptions.IgnoreCase);

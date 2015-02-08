@@ -126,5 +126,16 @@ namespace ClooN
         {
             return RoundImpl.ValueOf(module);
         }
+
+        /// <summary>
+        /// If value is smaller than edge returns 0 else value
+        /// </summary>
+        /// <param name="edge">The edge all values equal or below it will result in 0</param>
+        /// <param name="value">Value to get stepped</param>
+        /// <returns>If value is smaller than edge returns 0 else value</returns>
+        public static NoiseModule Step(NoiseModule edge, NoiseModule value)
+        {
+            return StepImpl.ValueOf(edge, value);
+        }
     }
 }

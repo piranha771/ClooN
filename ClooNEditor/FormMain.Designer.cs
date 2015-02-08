@@ -42,6 +42,7 @@
             this.labelVendor = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonStep = new System.Windows.Forms.Button();
             this.radioButtonImplicit = new System.Windows.Forms.RadioButton();
             this.radioButtonExplicit = new System.Windows.Forms.RadioButton();
             this.label8 = new System.Windows.Forms.Label();
@@ -67,6 +68,7 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusLabelOverhead = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.buttonShowCoords = new System.Windows.Forms.Button();
             this.buttonContrastSub = new System.Windows.Forms.Button();
             this.buttonContrastAdd = new System.Windows.Forms.Button();
             this.buttonExport = new System.Windows.Forms.Button();
@@ -82,8 +84,14 @@
             this.buttonShiftDown = new System.Windows.Forms.Button();
             this.toolTipButtons = new System.Windows.Forms.ToolTip(this.components);
             this.timerButtonDown = new System.Windows.Forms.Timer(this.components);
-            this.pictureBoxResult = new System.Windows.Forms.PictureBox();
             this.boxCode = new System.Windows.Forms.TextBox();
+            this.pictureBoxResult = new System.Windows.Forms.PictureBox();
+            this.labelCoordTL = new System.Windows.Forms.Label();
+            this.labelCoordTR = new System.Windows.Forms.Label();
+            this.labelCoordBR = new System.Windows.Forms.Label();
+            this.labelCoordBL = new System.Windows.Forms.Label();
+            this.labelCoordsZ = new System.Windows.Forms.Label();
+            this.statusLabelAbout = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBoxDeviceInfo.SuspendLayout();
             this.panel1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -203,6 +211,7 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.panel1.Controls.Add(this.buttonStep);
             this.panel1.Controls.Add(this.radioButtonImplicit);
             this.panel1.Controls.Add(this.radioButtonExplicit);
             this.panel1.Controls.Add(this.label8);
@@ -224,8 +233,20 @@
             this.panel1.Controls.Add(this.groupBoxDeviceInfo);
             this.panel1.Location = new System.Drawing.Point(12, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(256, 439);
+            this.panel1.Size = new System.Drawing.Size(256, 438);
             this.panel1.TabIndex = 4;
+            // 
+            // buttonStep
+            // 
+            this.buttonStep.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonStep.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonStep.Location = new System.Drawing.Point(150, 335);
+            this.buttonStep.Name = "buttonStep";
+            this.buttonStep.Size = new System.Drawing.Size(48, 24);
+            this.buttonStep.TabIndex = 36;
+            this.buttonStep.Text = "Step";
+            this.buttonStep.UseVisualStyleBackColor = false;
+            this.buttonStep.Click += new System.EventHandler(this.buttonStep_Click);
             // 
             // radioButtonImplicit
             // 
@@ -238,6 +259,7 @@
             this.radioButtonImplicit.TabStop = true;
             this.radioButtonImplicit.Text = "Implicit Input";
             this.radioButtonImplicit.UseVisualStyleBackColor = true;
+            this.radioButtonImplicit.CheckedChanged += new System.EventHandler(this.radioButtonImplicit_CheckedChanged);
             // 
             // radioButtonExplicit
             // 
@@ -248,12 +270,13 @@
             this.radioButtonExplicit.TabIndex = 34;
             this.radioButtonExplicit.Text = "Explicit Input";
             this.radioButtonExplicit.UseVisualStyleBackColor = true;
+            this.radioButtonExplicit.CheckedChanged += new System.EventHandler(this.radioButtonExplicit_CheckedChanged);
             // 
             // label8
             // 
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(9, 402);
+            this.label8.Location = new System.Drawing.Point(9, 401);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(130, 13);
             this.label8.TabIndex = 33;
@@ -282,7 +305,7 @@
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(-3, 423);
+            this.label6.Location = new System.Drawing.Point(-3, 422);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(52, 13);
             this.label6.TabIndex = 6;
@@ -291,9 +314,9 @@
             // buttonRound
             // 
             this.buttonRound.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonRound.Location = new System.Drawing.Point(150, 396);
+            this.buttonRound.Location = new System.Drawing.Point(202, 305);
             this.buttonRound.Name = "buttonRound";
-            this.buttonRound.Size = new System.Drawing.Size(100, 24);
+            this.buttonRound.Size = new System.Drawing.Size(48, 24);
             this.buttonRound.TabIndex = 30;
             this.buttonRound.Text = "Round";
             this.buttonRound.UseVisualStyleBackColor = true;
@@ -303,9 +326,9 @@
             // 
             this.buttonPower.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.buttonPower.BackColor = System.Drawing.SystemColors.Control;
-            this.buttonPower.Location = new System.Drawing.Point(150, 367);
+            this.buttonPower.Location = new System.Drawing.Point(150, 305);
             this.buttonPower.Name = "buttonPower";
-            this.buttonPower.Size = new System.Drawing.Size(100, 23);
+            this.buttonPower.Size = new System.Drawing.Size(48, 24);
             this.buttonPower.TabIndex = 29;
             this.buttonPower.Text = "Power";
             this.buttonPower.UseVisualStyleBackColor = false;
@@ -314,9 +337,9 @@
             // buttonMax
             // 
             this.buttonMax.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonMax.Location = new System.Drawing.Point(150, 336);
+            this.buttonMax.Location = new System.Drawing.Point(202, 275);
             this.buttonMax.Name = "buttonMax";
-            this.buttonMax.Size = new System.Drawing.Size(100, 24);
+            this.buttonMax.Size = new System.Drawing.Size(48, 24);
             this.buttonMax.TabIndex = 28;
             this.buttonMax.Text = "Max";
             this.buttonMax.UseVisualStyleBackColor = true;
@@ -325,9 +348,9 @@
             // buttonMin
             // 
             this.buttonMin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonMin.Location = new System.Drawing.Point(150, 305);
+            this.buttonMin.Location = new System.Drawing.Point(150, 275);
             this.buttonMin.Name = "buttonMin";
-            this.buttonMin.Size = new System.Drawing.Size(100, 25);
+            this.buttonMin.Size = new System.Drawing.Size(48, 24);
             this.buttonMin.TabIndex = 27;
             this.buttonMin.Text = "Min";
             this.buttonMin.UseVisualStyleBackColor = true;
@@ -336,9 +359,9 @@
             // buttonLerp
             // 
             this.buttonLerp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonLerp.Location = new System.Drawing.Point(150, 275);
+            this.buttonLerp.Location = new System.Drawing.Point(202, 245);
             this.buttonLerp.Name = "buttonLerp";
-            this.buttonLerp.Size = new System.Drawing.Size(100, 24);
+            this.buttonLerp.Size = new System.Drawing.Size(48, 24);
             this.buttonLerp.TabIndex = 22;
             this.buttonLerp.Text = "Lerp";
             this.buttonLerp.UseVisualStyleBackColor = true;
@@ -347,9 +370,9 @@
             // buttonAbs
             // 
             this.buttonAbs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonAbs.Location = new System.Drawing.Point(150, 246);
+            this.buttonAbs.Location = new System.Drawing.Point(150, 245);
             this.buttonAbs.Name = "buttonAbs";
-            this.buttonAbs.Size = new System.Drawing.Size(100, 24);
+            this.buttonAbs.Size = new System.Drawing.Size(48, 24);
             this.buttonAbs.TabIndex = 21;
             this.buttonAbs.Text = "Abs";
             this.buttonAbs.UseVisualStyleBackColor = true;
@@ -358,7 +381,7 @@
             // buttonVoronoi
             // 
             this.buttonVoronoi.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonVoronoi.Location = new System.Drawing.Point(6, 336);
+            this.buttonVoronoi.Location = new System.Drawing.Point(6, 335);
             this.buttonVoronoi.Name = "buttonVoronoi";
             this.buttonVoronoi.Size = new System.Drawing.Size(138, 24);
             this.buttonVoronoi.TabIndex = 19;
@@ -369,7 +392,7 @@
             // buttonTurbulence
             // 
             this.buttonTurbulence.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonTurbulence.Location = new System.Drawing.Point(6, 306);
+            this.buttonTurbulence.Location = new System.Drawing.Point(6, 305);
             this.buttonTurbulence.Name = "buttonTurbulence";
             this.buttonTurbulence.Size = new System.Drawing.Size(138, 24);
             this.buttonTurbulence.TabIndex = 18;
@@ -380,7 +403,7 @@
             // buttonRMF
             // 
             this.buttonRMF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonRMF.Location = new System.Drawing.Point(6, 276);
+            this.buttonRMF.Location = new System.Drawing.Point(6, 275);
             this.buttonRMF.Name = "buttonRMF";
             this.buttonRMF.Size = new System.Drawing.Size(138, 24);
             this.buttonRMF.TabIndex = 17;
@@ -391,7 +414,7 @@
             // buttonFBM
             // 
             this.buttonFBM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonFBM.Location = new System.Drawing.Point(6, 246);
+            this.buttonFBM.Location = new System.Drawing.Point(6, 245);
             this.buttonFBM.Name = "buttonFBM";
             this.buttonFBM.Size = new System.Drawing.Size(138, 24);
             this.buttonFBM.TabIndex = 16;
@@ -409,7 +432,7 @@
             this.labelParseMessage.ForeColor = System.Drawing.Color.Red;
             this.labelParseMessage.Location = new System.Drawing.Point(274, 12);
             this.labelParseMessage.Name = "labelParseMessage";
-            this.labelParseMessage.Size = new System.Drawing.Size(432, 401);
+            this.labelParseMessage.Size = new System.Drawing.Size(475, 400);
             this.labelParseMessage.TabIndex = 6;
             this.labelParseMessage.Text = "Empty module";
             this.labelParseMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -427,10 +450,11 @@
             this.toolStripStatusLabel1,
             this.statusLabelCloonTime,
             this.toolStripStatusLabel2,
-            this.statusLabelOverhead});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 524);
+            this.statusLabelOverhead,
+            this.statusLabelAbout});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 523);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(718, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(761, 22);
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -456,8 +480,8 @@
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(61, 17);
-            this.toolStripStatusLabel2.Text = "Overhead:";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(95, 17);
+            this.toolStripStatusLabel2.Text = "Editor Overhead:";
             // 
             // statusLabelOverhead
             // 
@@ -470,6 +494,7 @@
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.buttonShowCoords);
             this.panel2.Controls.Add(this.buttonContrastSub);
             this.panel2.Controls.Add(this.buttonContrastAdd);
             this.panel2.Controls.Add(this.buttonExport);
@@ -483,10 +508,22 @@
             this.panel2.Controls.Add(this.buttonShiftLeft);
             this.panel2.Controls.Add(this.buttonShiftUp);
             this.panel2.Controls.Add(this.buttonShiftDown);
-            this.panel2.Location = new System.Drawing.Point(274, 419);
+            this.panel2.Location = new System.Drawing.Point(274, 418);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(432, 32);
+            this.panel2.Size = new System.Drawing.Size(475, 32);
             this.panel2.TabIndex = 10;
+            // 
+            // buttonShowCoords
+            // 
+            this.buttonShowCoords.BackgroundImage = global::ClooNEditor.Properties.Resources.map;
+            this.buttonShowCoords.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.buttonShowCoords.Location = new System.Drawing.Point(408, 3);
+            this.buttonShowCoords.Name = "buttonShowCoords";
+            this.buttonShowCoords.Size = new System.Drawing.Size(24, 24);
+            this.buttonShowCoords.TabIndex = 13;
+            this.toolTipButtons.SetToolTip(this.buttonShowCoords, "Show/Hide Coordinates");
+            this.buttonShowCoords.UseVisualStyleBackColor = true;
+            this.buttonShowCoords.Click += new System.EventHandler(this.buttonShowCoords_Click);
             // 
             // buttonContrastSub
             // 
@@ -496,7 +533,7 @@
             this.buttonContrastSub.Name = "buttonContrastSub";
             this.buttonContrastSub.Size = new System.Drawing.Size(24, 24);
             this.buttonContrastSub.TabIndex = 12;
-            this.toolTipButtons.SetToolTip(this.buttonContrastSub, "Refresh");
+            this.toolTipButtons.SetToolTip(this.buttonContrastSub, "Decrase Contrast");
             this.buttonContrastSub.UseVisualStyleBackColor = true;
             this.buttonContrastSub.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonContrastSub_MouseDown);
             this.buttonContrastSub.MouseUp += new System.Windows.Forms.MouseEventHandler(this.modifierButton_MouseUp);
@@ -509,7 +546,7 @@
             this.buttonContrastAdd.Name = "buttonContrastAdd";
             this.buttonContrastAdd.Size = new System.Drawing.Size(24, 24);
             this.buttonContrastAdd.TabIndex = 11;
-            this.toolTipButtons.SetToolTip(this.buttonContrastAdd, "Refresh");
+            this.toolTipButtons.SetToolTip(this.buttonContrastAdd, "Increase Contrast");
             this.buttonContrastAdd.UseVisualStyleBackColor = true;
             this.buttonContrastAdd.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonContrastAdd_MouseDown);
             this.buttonContrastAdd.MouseUp += new System.Windows.Forms.MouseEventHandler(this.modifierButton_MouseUp);
@@ -519,7 +556,7 @@
             this.buttonExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonExport.BackgroundImage = global::ClooNEditor.Properties.Resources.export_code;
             this.buttonExport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.buttonExport.Location = new System.Drawing.Point(403, 3);
+            this.buttonExport.Location = new System.Drawing.Point(446, 3);
             this.buttonExport.Name = "buttonExport";
             this.buttonExport.Size = new System.Drawing.Size(24, 24);
             this.buttonExport.TabIndex = 10;
@@ -665,6 +702,19 @@
             this.timerButtonDown.Interval = 40;
             this.timerButtonDown.Tick += new System.EventHandler(this.timerButtonDown_Tick);
             // 
+            // boxCode
+            // 
+            this.boxCode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.boxCode.Font = new System.Drawing.Font("Lucida Console", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.boxCode.Location = new System.Drawing.Point(15, 456);
+            this.boxCode.Multiline = true;
+            this.boxCode.Name = "boxCode";
+            this.boxCode.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.boxCode.Size = new System.Drawing.Size(734, 64);
+            this.boxCode.TabIndex = 12;
+            this.boxCode.TextChanged += new System.EventHandler(this.boxCode_TextChanged);
+            // 
             // pictureBoxResult
             // 
             this.pictureBoxResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -674,28 +724,90 @@
             this.pictureBoxResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBoxResult.Location = new System.Drawing.Point(274, 12);
             this.pictureBoxResult.Name = "pictureBoxResult";
-            this.pictureBoxResult.Size = new System.Drawing.Size(432, 401);
+            this.pictureBoxResult.Size = new System.Drawing.Size(475, 400);
             this.pictureBoxResult.TabIndex = 0;
             this.pictureBoxResult.TabStop = false;
             // 
-            // boxCode
+            // labelCoordTL
             // 
-            this.boxCode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.labelCoordTL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.boxCode.Font = new System.Drawing.Font("Lucida Console", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.boxCode.Location = new System.Drawing.Point(15, 457);
-            this.boxCode.Multiline = true;
-            this.boxCode.Name = "boxCode";
-            this.boxCode.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.boxCode.Size = new System.Drawing.Size(691, 64);
-            this.boxCode.TabIndex = 12;
-            this.boxCode.TextChanged += new System.EventHandler(this.boxCode_TextChanged);
+            this.labelCoordTL.ForeColor = System.Drawing.Color.Red;
+            this.labelCoordTL.Location = new System.Drawing.Point(276, 14);
+            this.labelCoordTL.Name = "labelCoordTL";
+            this.labelCoordTL.Size = new System.Drawing.Size(231, 46);
+            this.labelCoordTL.TabIndex = 13;
+            this.labelCoordTL.Text = "0 / 0";
+            // 
+            // labelCoordTR
+            // 
+            this.labelCoordTR.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelCoordTR.ForeColor = System.Drawing.Color.Red;
+            this.labelCoordTR.Location = new System.Drawing.Point(513, 14);
+            this.labelCoordTR.Name = "labelCoordTR";
+            this.labelCoordTR.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.labelCoordTR.Size = new System.Drawing.Size(232, 46);
+            this.labelCoordTR.TabIndex = 14;
+            this.labelCoordTR.Text = "0 / 0";
+            this.labelCoordTR.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // labelCoordBR
+            // 
+            this.labelCoordBR.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelCoordBR.ForeColor = System.Drawing.Color.Red;
+            this.labelCoordBR.Location = new System.Drawing.Point(573, 362);
+            this.labelCoordBR.Name = "labelCoordBR";
+            this.labelCoordBR.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.labelCoordBR.Size = new System.Drawing.Size(172, 47);
+            this.labelCoordBR.TabIndex = 16;
+            this.labelCoordBR.Text = "0 / 0";
+            this.labelCoordBR.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            // 
+            // labelCoordBL
+            // 
+            this.labelCoordBL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelCoordBL.ForeColor = System.Drawing.Color.Red;
+            this.labelCoordBL.Location = new System.Drawing.Point(276, 362);
+            this.labelCoordBL.Name = "labelCoordBL";
+            this.labelCoordBL.Size = new System.Drawing.Size(164, 47);
+            this.labelCoordBL.TabIndex = 15;
+            this.labelCoordBL.Text = "0 / 0";
+            this.labelCoordBL.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // labelCoordsZ
+            // 
+            this.labelCoordsZ.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelCoordsZ.ForeColor = System.Drawing.Color.Red;
+            this.labelCoordsZ.Location = new System.Drawing.Point(446, 362);
+            this.labelCoordsZ.Name = "labelCoordsZ";
+            this.labelCoordsZ.Size = new System.Drawing.Size(121, 47);
+            this.labelCoordsZ.TabIndex = 17;
+            this.labelCoordsZ.Text = "Z: 0";
+            this.labelCoordsZ.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            // 
+            // statusLabelAbout
+            // 
+            this.statusLabelAbout.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.statusLabelAbout.IsLink = true;
+            this.statusLabelAbout.Name = "statusLabelAbout";
+            this.statusLabelAbout.Size = new System.Drawing.Size(471, 17);
+            this.statusLabelAbout.Spring = true;
+            this.statusLabelAbout.Text = "http://CodeDrain.net";
+            this.statusLabelAbout.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.statusLabelAbout.TextDirection = System.Windows.Forms.ToolStripTextDirection.Horizontal;
+            this.statusLabelAbout.Click += new System.EventHandler(this.statusLabelAbout_Click);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(718, 546);
+            this.ClientSize = new System.Drawing.Size(761, 545);
+            this.Controls.Add(this.labelCoordsZ);
+            this.Controls.Add(this.labelCoordTL);
+            this.Controls.Add(this.labelCoordBR);
+            this.Controls.Add(this.labelCoordBL);
+            this.Controls.Add(this.labelCoordTR);
             this.Controls.Add(this.boxCode);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.statusStrip1);
@@ -703,10 +815,10 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pictureBoxResult);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(734, 585);
+            this.MinimumSize = new System.Drawing.Size(777, 584);
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "ClooN Editor";
+            this.Text = "ClooN Editor v1.1";
             this.Shown += new System.EventHandler(this.FormMain_Shown);
             this.ResizeEnd += new System.EventHandler(this.FormMain_ResizeEnd);
             this.Resize += new System.EventHandler(this.FormMain_Resize);
@@ -779,6 +891,14 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.RadioButton radioButtonImplicit;
         private System.Windows.Forms.RadioButton radioButtonExplicit;
+        private System.Windows.Forms.Button buttonShowCoords;
+        private System.Windows.Forms.Label labelCoordTL;
+        private System.Windows.Forms.Label labelCoordTR;
+        private System.Windows.Forms.Label labelCoordBR;
+        private System.Windows.Forms.Label labelCoordBL;
+        private System.Windows.Forms.Label labelCoordsZ;
+        private System.Windows.Forms.Button buttonStep;
+        private System.Windows.Forms.ToolStripStatusLabel statusLabelAbout;
     }
 }
 

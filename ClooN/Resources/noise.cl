@@ -60,7 +60,7 @@ float noise(__global int *p, float x, float y, float z)
     int A = perm(p, X + 0) + Y, AA = perm(p, A) + Z, AB = perm(p, A+1) + Z,
         B = perm(p, X + 1) + Y, BA = perm(p, B) + Z, BB = perm(p, B+1) + Z;
 
-    return lerp(w, lerp(v, lerp(u, grad(perm(p, AA  ), x  , y  , z   ),
+    return lerp(w, lerp(v,  lerp(u, grad(perm(p, AA  ), x  , y  , z   ),
                                     grad(perm(p, BA  ), x-1, y  , z   )),
                             lerp(u, grad(perm(p, AB  ), x  , y-1, z   ),
                                     grad(perm(p, BB  ), x-1, y-1, z   ))),
@@ -72,6 +72,7 @@ float noise(__global int *p, float x, float y, float z)
 
 float valueNoise(__global int *p, float x, float y, float z, int seed)
 {
+	
     int X = (int)floor(x) & 255;
     int Y = (int)floor(y) & 255;
     int Z = (int)floor(z) & 255;
