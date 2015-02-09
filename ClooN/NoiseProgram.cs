@@ -104,7 +104,7 @@ namespace ClooN
             }
 
             __kernel void cl_main_range(ImplicitCube cube, __global int *perm, __global float *output) {
-                int index = get_global_id(0) + cube.lengthX * (get_global_id(1) + cube.lengthZ * get_global_id(2)) ;
+                int index = cube.lengthY * cube.lengthX * get_global_id(2) + cube.lengthX * get_global_id(1) + get_global_id(0);
                 Single3 in_pos = { cube.startX + get_global_id(0) * cube.offsetX, cube.startY + get_global_id(1) * cube.offsetY, cube.startZ + get_global_id(2) * cube.offsetZ };
                 output[index] = " + module.Code + @";
             }";
