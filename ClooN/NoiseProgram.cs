@@ -81,7 +81,7 @@ namespace ClooN
         }
 
         /// <summary>
-        /// Compiles the OpenCL program on the first availble platform
+        /// Compiles the OpenCL program on a given platform
         /// </summary>
         /// <param name="platform">The platform to run this program on</param>
         public void Compile(ComputePlatform platform) {
